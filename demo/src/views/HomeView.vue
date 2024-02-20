@@ -122,7 +122,7 @@
 import columns from '../mocks/columns.json'
 import users from '../mocks/users.json'
 import rawTasks from '../mocks/tasks.json'
-import { normalizeTask, getTagsArrayFromString } from '../common/helpers'
+import { normalizeTask, getTagsArrayFromString, getImage } from '../common/helpers'
 import { STATUSES } from '../common/constants'
 
 const normalizedTasks = rawTasks.map(task => normalizeTask(task))
@@ -137,10 +137,6 @@ const columnTasks = normalizedTasks
       }
       return accumulator
     }, {})
-const getImage = image => {
-  // https://vitejs.dev/guide/assets.html#new-url-url-import-meta-url
-  return new URL(`../assets/img/${image}`, import.meta.url).href
-}
 </script>
 
 <style lang="scss" scoped>
