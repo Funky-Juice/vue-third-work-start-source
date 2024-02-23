@@ -13,7 +13,7 @@
 
 <script setup>
 import AppLayoutHeader from "./AppLayoutHeader.vue";
-import AppLayoutSidebar from "demo/src/layouts/AppLayoutSidebar.vue";
+import AppLayoutSidebar from "./AppLayoutSidebar.vue";
 
 const props = defineProps({
   tasks: {
