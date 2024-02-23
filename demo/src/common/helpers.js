@@ -123,3 +123,12 @@ export const getTimeAgo = (date) => {
   }
   return "сейчас";
 };
+
+export const getReadableDate = (date) => {
+  if (isNaN(Date.parse(date))) return "";
+  const newDate = new Date(date);
+  const year = newDate.getFullYear();
+  const month = newDate.getMonth();
+  const day = newDate.getDate();
+  return `${day}.${month + 1}.${year}`;
+};

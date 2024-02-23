@@ -40,10 +40,25 @@
       <div class="task-card__block">
         <ul class="task-card__params">
           <!--Участник задачи-->
-
+          <li v-if="task && task.user">
+            Участник:
+            <div class="task-card__participant">
+              <button type="button" class="task-card__user">
+                <img :src="getImage(task.user.avatar)" :alt="task.user.name" />
+                {{ task.user.name }}
+              </button>
+            </div>
+          </li>
           <!--Срок выполнения-->
+          <li v-if="dueDate">
+            Срок:
+            <button type="button" class="task-card__date-link">
+              {{ dueDate }}
+            </button>
+          </li>
         </ul>
       </div>
+
       <!--Описание задачи-->
 
       <!--Дополнительная ссылка-->
@@ -60,6 +75,7 @@
 <script setup>
 import { ref, onMounted, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
+import { getReadableDate, getImage } from "../common/helpers";
 
 import { useTaskCardDate } from "../common/composables";
 
@@ -73,6 +89,10 @@ const props = defineProps({
     type: Array,
     required: true,
   },
+});
+
+const dueDate = computed(() => {
+  return getReadableDate(task.value.dueDate || "");
 });
 
 const task = computed(() => {
