@@ -105,3 +105,95 @@ const submit = function () {
   newComment.value = "";
 };
 </script>
+
+<style lang="scss" scoped>
+@import "@/assets/scss/app.scss";
+.comments {
+  &__list {
+    @include clear-list;
+  }
+
+  &__item {
+    margin-top: 24px;
+
+    p {
+      @include r-s14-h21;
+    }
+
+    strong {
+      color: $blue-600;
+
+      @include r-s14-h21;
+    }
+  }
+
+  &__user {
+    display: flex;
+    align-items: center;
+
+    width: 100%;
+    margin: 0;
+    padding: 0;
+
+    text-align: left;
+
+    background-color: transparent;
+
+    @include r-s14-h16;
+
+    img {
+      width: 30px;
+      height: 30px;
+      margin-right: 10px;
+
+      border-radius: 50%;
+    }
+
+    span {
+      display: block;
+
+      box-sizing: border-box;
+      width: 30px;
+      height: 30px;
+      margin-right: 10px;
+      padding-top: 5px;
+
+      text-align: center;
+
+      color: $white-900;
+      border-radius: 50%;
+      background-color: $green-700;
+
+      @include m-s14-h21;
+    }
+  }
+
+  &__form {
+    margin-top: 24px;
+
+    &__button {
+      display: block;
+
+      margin: 0;
+      margin-top: 15px;
+      margin-left: auto;
+      padding: 0;
+
+      cursor: pointer;
+      transition: opacity $animationSpeed;
+
+      opacity: 0.5;
+      color: $blue-gray-600;
+      border: none;
+      outline: none;
+      background-color: transparent;
+
+      @include m-s14-h21;
+
+      &:hover {
+        opacity: 1;
+      }
+    }
+  }
+}
+</style>
