@@ -79,7 +79,13 @@
 
       <!--Чек-лист-->
 
-      <!--Метки-->
+      <div
+        v-if="task && task.tags && task.tags.length"
+        class="task-card__block"
+      >
+        <h4 class="task-card__title">Метки</h4>
+        <task-card-tags :tags="task.tags" />
+      </div>
 
       <!--Комментарии-->
     </section>
@@ -92,6 +98,7 @@ import { useRoute, useRouter } from "vue-router";
 import { getReadableDate, getImage } from "../common/helpers";
 
 import { useTaskCardDate } from "../common/composables";
+import TaskCardTags from "../modules/tasks/components/TaskCardTags.vue";
 
 const router = useRouter();
 const route = useRoute();
