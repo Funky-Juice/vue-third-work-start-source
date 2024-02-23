@@ -14,11 +14,28 @@
       <div class="task-card__block">
         <div class="task-card__row">
           <!--Наименование задачи-->
-
+          <h1 class="task-card__name task-card__name--min">
+            {{ task ? task.title : "" }}
+          </h1>
           <!--Кнопка редактирования задачи-->
+          <a
+            class="task-card__edit"
+            @click="
+              router.push({
+                name: 'TaskEdit',
+                params: { id: $route.params.id },
+              })
+            "
+          >
+            Редактировать задачу
+          </a>
         </div>
         <!--Дата создания задачи-->
+        <p class="task-card__date">
+          {{ task.dueDate }}
+        </p>
       </div>
+
       <!--Участник задачи и срок выполнения-->
       <div class="task-card__block">
         <ul class="task-card__params">
@@ -41,12 +58,24 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
 const router = useRouter();
 const route = useRoute();
 const dialog = ref(null);
+
+// Передадим все задачи в компонент
+const props = defineProps({
+  tasks: {
+    type: Array,
+    required: true,
+  },
+});
+
+const task = computed(() => {
+  return props.tasks.find((task) => task.id == route.params.id);
+});
 
 onMounted(() => {
   // Фокусируемся на диалоговом окне, чтобы сработала клавиша Esc без дополнительного клика на окне
