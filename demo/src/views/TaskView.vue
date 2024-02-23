@@ -94,6 +94,13 @@
       </div>
 
       <!--Комментарии-->
+      <task-card-view-comments
+        v-if="task"
+        class="task-card__comments"
+        :comments="task.comments || []"
+        :task-id="task.id"
+        @create-new-comment="addCommentToList"
+      />
     </section>
   </div>
 </template>
@@ -104,8 +111,10 @@ import { useRoute, useRouter } from "vue-router";
 import { getReadableDate, getImage } from "../common/helpers";
 
 import { useTaskCardDate } from "../common/composables";
+
 import TaskCardTags from "../modules/tasks/components/TaskCardTags.vue";
 import TaskCardViewTicksList from "../modules/tasks/components/TaskCardViewTicksList.vue";
+import TaskCardViewComments from "../modules/tasks/components/TaskCardViewComments.vue";
 
 const router = useRouter();
 const route = useRoute();
@@ -134,6 +143,13 @@ onMounted(() => {
 
 const closeDialog = function () {
   router.push("/");
+};
+
+const addCommentToList = function (comment) {
+  if (!task.value.comments) {
+    task.value.comments = [];
+  }
+  task.value.comments.push(comment);
 };
 </script>
 
