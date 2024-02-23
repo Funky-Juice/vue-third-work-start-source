@@ -32,7 +32,7 @@
         </div>
         <!--Дата создания задачи-->
         <p class="task-card__date">
-          {{ task.dueDate }}
+          {{ useTaskCardDate(task) }}
         </p>
       </div>
 
@@ -60,6 +60,8 @@
 <script setup>
 import { ref, onMounted, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
+
+import { useTaskCardDate } from "../common/composables";
 
 const router = useRouter();
 const route = useRoute();
