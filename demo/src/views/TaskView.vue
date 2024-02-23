@@ -1,7 +1,14 @@
 <template>
-  <div class="task-card">
+  <div
+    class="task-card"
+    tabindex="0"
+    ref="dialog"
+    @click.self="closeDialog"
+    @keydown.esc="closeDialog"
+  >
     <section class="task-card__wrapper">
       <!--Закрытие задачи-->
+      <button class="task-card__close" type="button" @click="closeDialog" />
 
       <!--Шапка задачи-->
       <div class="task-card__block">
@@ -32,3 +39,21 @@
     </section>
   </div>
 </template>
+
+<script setup>
+import { ref, onMounted } from "vue";
+import { useRoute, useRouter } from "vue-router";
+
+const router = useRouter();
+const route = useRoute();
+const dialog = ref(null);
+
+onMounted(() => {
+  // Фокусируемся на диалоговом окне, чтобы сработала клавиша Esc без дополнительного клика на окне
+  dialog.value.focus();
+});
+
+const closeDialog = function () {
+  router.push("/");
+};
+</script>
