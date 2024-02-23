@@ -60,8 +60,22 @@
       </div>
 
       <!--Описание задачи-->
-
+      <div class="task-card__block">
+        <div v-if="task && task.description" class="task-card__description">
+          <h4 class="task-card__title">Описание</h4>
+          <p>{{ task.description }}</p>
+        </div>
+      </div>
       <!--Дополнительная ссылка-->
+      <div v-if="task && task.url" class="task-card__block task-card__links">
+        <h4 class="task-card__title">Ссылки</h4>
+
+        <div class="task-card__links-item">
+          <a :href="task.url" target="_blank">
+            {{ task.urlDescription || "ссылка" }}
+          </a>
+        </div>
+      </div>
 
       <!--Чек-лист-->
 
