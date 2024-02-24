@@ -69,8 +69,9 @@
       <div class="task-card__block">
         <ul class="task-card__params">
           <!--          Блок выбора пользователя-->
-
+          <tasks-card-creator-user-selector v-model="task.userId" />
           <!--          Блок выбора даты выполнения-->
+          <tasks-card-creator-due-date-selector v-model="task.dueDate" />
         </ul>
       </div>
 
@@ -118,6 +119,9 @@ import { createNewDate } from "@/common/helpers";
 import { STATUSES } from "@/common/constants";
 import { useTaskCardDate } from "@/common/composables";
 import taskStatuses from "@/common/enums/taskStatuses";
+
+import TasksCardCreatorUserSelector from "./TaskCardCreatorUserSelector.vue";
+import TasksCardCreatorDueDateSelector from "./TaskCardCreatorDueDateSelector.vue";
 
 const props = defineProps({
   taskToEdit: {
