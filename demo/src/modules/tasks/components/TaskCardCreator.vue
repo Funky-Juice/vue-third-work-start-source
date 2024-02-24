@@ -129,6 +129,7 @@
       <!--      Блок тегов-->
       <div class="task-card__block">
         <!--        Компонент создания тегов-->
+        <task-card-creator-tags :tags="task.tags" @setTags="setTags" />
       </div>
 
       <!--      Блок сохранения и отмены изменений-->
@@ -151,6 +152,7 @@ import { STATUSES } from "@/common/constants";
 import { useTaskCardDate } from "@/common/composables";
 import taskStatuses from "@/common/enums/taskStatuses";
 
+import TaskCardCreatorTags from "./TaskCardCreatorTags.vue";
 import TaskCardViewTicksList from "./TaskCardViewTicksList.vue";
 import TasksCardCreatorUserSelector from "./TaskCardCreatorUserSelector.vue";
 import TasksCardCreatorDueDateSelector from "./TaskCardCreatorDueDateSelector.vue";
@@ -256,6 +258,10 @@ function removeTick({ uuid, id }) {
   if (id) {
     task.value.ticks = task.value.ticks.filter((tick) => tick.id !== id);
   }
+}
+
+function setTags(tags) {
+  task.value.tags = tags;
 }
 
 function closeDialog() {
