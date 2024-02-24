@@ -135,23 +135,35 @@
       <!--      Блок сохранения и отмены изменений-->
       <div class="task-card__buttons">
         <!--        Кнопка отмены изменений-->
-
+        <app-button class="button--border" @click="closeDialog">
+          Отменить
+        </app-button>
         <!--        Кнопка сохранения изменений-->
+        <app-button
+          class="button--primary"
+          :class="{ 'button--disabled': !isFormValid }"
+          :disabled="!isFormValid"
+          @click="submit"
+        >
+          Сохранить
+        </app-button>
       </div>
     </section>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, watch } from "vue";
 import { useRouter } from "vue-router";
 import { cloneDeep } from "lodash";
 
 import { createUUIDv4, createNewDate } from "@/common/helpers";
 import { STATUSES } from "@/common/constants";
 import { useTaskCardDate } from "@/common/composables";
+import { validateFields } from "@/common/validator";
 import taskStatuses from "@/common/enums/taskStatuses";
 
+import AppButton from "@/common/components/AppButton.vue";
 import TaskCardCreatorTags from "./TaskCardCreatorTags.vue";
 import TaskCardViewTicksList from "./TaskCardViewTicksList.vue";
 import TasksCardCreatorUserSelector from "./TaskCardCreatorUserSelector.vue";
@@ -213,6 +225,18 @@ const validations = ref(setEmptyValidations());
 
 const statusList = ref(STATUSES.slice(0, 3));
 
+const isFormValid = ref(true);
+
+// Отслеживаем изменения в задаче, чтобы сбросить ошибки валидации
+watch(
+  task,
+  () => {
+    isFormValid.value = true;
+    validations.value = setEmptyValidations();
+  },
+  { deep: true },
+);
+
 onMounted(() => {
   // Фокусируем на диалоговом окне, чтобы сработала клавиша Esc без дополнительного клика на окне
   dialog.value.focus();
@@ -258,6 +282,23 @@ function removeTick({ uuid, id }) {
   if (id) {
     task.value.ticks = task.value.ticks.filter((tick) => tick.id !== id);
   }
+}
+
+function submit() {
+  // Валидируем задачу
+  if (!validateFields(task.value, validations.value)) {
+    isFormValid.value = false;
+    return;
+  }
+  if (props.taskToEdit) {
+    // Редактируемая задача
+    emits("editTask", task.value);
+  } else {
+    // Новая задача
+    emits("addTask", task.value);
+  }
+  // Переход на главную страницу
+  router.push("/");
 }
 
 function setTags(tags) {
