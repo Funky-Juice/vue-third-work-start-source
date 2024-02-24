@@ -14,8 +14,21 @@
       <div class="task-card__block">
         <div class="task-card__row">
           <!--          Поле ввода имени задачи-->
-
+          <input
+            v-model="task.title"
+            type="text"
+            name="task_name"
+            class="task-card__name"
+            max="37"
+          />
           <!--          Кнопка удаления задачи-->
+          <a
+            v-if="taskToEdit"
+            class="task-card__edit task-card__edit--red"
+            @click="deleteTask"
+          >
+            Удалить Задачу
+          </a>
         </div>
         <!--        Ошибка валидации поля ввода имени -->
       </div>
@@ -74,9 +87,40 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
+import { createNewDate } from "@/common/helpers";
+import { cloneDeep } from "lodash";
 
+const props = defineProps({
+  taskToEdit: {
+    type: Object,
+    default: null,
+  },
+});
+
+const emits = defineEmits(["addTask", "editTask", "deleteTask"]);
+
+// Функция для создания новых задач
+const createNewTask = () => ({
+  userId: null,
+  columnId: null,
+  statusId: null,
+  title: "Название задачи",
+  description: "",
+  sortOrder: 0,
+  dueDate: createNewDate(),
+  url: "",
+  urlDescription: "",
+  ticks: [],
+  tags: "",
+});
+
+// Определяем, если мы работаем над редактированием задачи или создаём новую
+const taskToWork = props.taskToEdit
+  ? cloneDeep(props.taskToEdit)
+  : createNewTask();
+
+const task = ref(taskToWork);
 const router = useRouter();
-
 const dialog = ref(null);
 
 onMounted(() => {
@@ -86,6 +130,11 @@ onMounted(() => {
 
 function closeDialog() {
   // Закрытие диалога, всего лишь переход на корневой маршрут
+  router.push("/");
+}
+
+function deleteTask() {
+  emits("deleteTask", task.value.id);
   router.push("/");
 }
 </script>
