@@ -36,12 +36,34 @@
         </span>
       </div>
 
-      <!--      Блок статуса задачи-->
+      <!--Блок статуса задачи-->
       <div class="task-card__status">
-        <!--        Список статусов задачи-->
+        <h4 class="task-card__title">Выберите статус:</h4>
+
+        <!--Список статусов задачи-->
+        <ul class="meta-filter task-card__meta">
+          <li
+            v-for="{ value, label } in statusList"
+            :key="value"
+            class="meta-filter__item"
+            :class="{ active: value === taskStatuses[task.statusId] }"
+            @click="setStatus(value)"
+          >
+            <a
+              class="meta-filter__status"
+              :class="`meta-filter__status--${value}`"
+              :title="label"
+            />
+          </li>
+        </ul>
       </div>
 
       <!--      Блок даты выполнения задачи-->
+      <div v-if="task.id" class="task-card__block">
+        <p class="task-card__date">
+          {{ useTaskCardDate(task) }}
+        </p>
+      </div>
 
       <!--      Блок ввода пользователя и даты срока выполнения-->
       <div class="task-card__block">
@@ -90,8 +112,12 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
-import { createNewDate } from "@/common/helpers";
 import { cloneDeep } from "lodash";
+
+import { createNewDate } from "@/common/helpers";
+import { STATUSES } from "@/common/constants";
+import { useTaskCardDate } from "@/common/composables";
+import taskStatuses from "@/common/enums/taskStatuses";
 
 const props = defineProps({
   taskToEdit: {
@@ -139,10 +165,24 @@ const setEmptyValidations = () => ({
 
 const validations = ref(setEmptyValidations());
 
+const statusList = ref(STATUSES.slice(0, 3));
+
 onMounted(() => {
   // Фокусируем на диалоговом окне, чтобы сработала клавиша Esc без дополнительного клика на окне
   dialog.value.focus();
 });
+
+function setStatus(status) {
+  const [key] = Object.entries(taskStatuses).find(
+    ([_, value]) => value === status,
+  );
+  const taskStatus = task.value.statusId;
+  if (!taskStatus || taskStatus !== +key) {
+    task.value.statusId = +key;
+  } else {
+    task.value.statusId = null;
+  }
+}
 
 function closeDialog() {
   // Закрытие диалога, всего лишь переход на корневой маршрут
