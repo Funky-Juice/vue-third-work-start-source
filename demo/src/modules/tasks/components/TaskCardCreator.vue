@@ -76,16 +76,41 @@
       </div>
 
       <!--      Блок описания задачи-->
+      <div class="task-card__block">
+        <div class="task-card__description">
+          <h4 class="task-card__title">Описание</h4>
+          <textarea
+            v-model="task.description"
+            name="task_description"
+            placeholder="Добавьте описание к задаче"
+          />
+        </div>
+      </div>
 
       <!--      Блок внешней ссылки-->
       <div class="task-card__block">
         <div class="task-card__links">
+          <h4 class="task-card__title">Ссылки</h4>
+
           <div class="task-card__links-item">
             <!--            Поле ввода ссылки-->
-
+            <input
+              v-model="task.url"
+              type="text"
+              name="task_link_url"
+              placeholder="Введите url"
+            />
             <!--            Ошибка валидации поля ввода ссылки-->
-
+            <span v-if="validations.url.error" class="task-card__error-text">
+              {{ validations.url.error }}
+            </span>
             <!--            Описание ссылки-->
+            <input
+              v-model="task.urlDescription"
+              type="text"
+              name="task_link_desc"
+              placeholder="Добавьте описание к ссылке"
+            />
           </div>
         </div>
       </div>
