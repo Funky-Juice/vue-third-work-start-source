@@ -1,7 +1,7 @@
-// import { fileURLToPath, URL } from 'url'
-import path from 'path'
-import { defineConfig } from 'vite'
-import vue from '@vitejs/plugin-vue'
+import { fileURLToPath, URL } from "url";
+// import path from 'path'
+import { defineConfig } from "vite";
+import vue from "@vitejs/plugin-vue";
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -11,19 +11,19 @@ export default defineConfig({
       scss: {
         additionalData: [
           '@import "./src/assets/scss/app";',
-          '', // end with newline
-        ].join('\n')
-      }
-    }
+          "", // end with newline
+        ].join("\n"),
+      },
+    },
   },
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, './src')
-      // '@': fileURLToPath(new URL('./src', import.meta.url))
-    }
+      // '@': path.resolve(__dirname, './src')
+      "@": fileURLToPath(new URL("./src", import.meta.url)),
+    },
   },
   server: {
     host: true,
-    port: 8081
-  }
-})
+    port: 8081,
+  },
+});
