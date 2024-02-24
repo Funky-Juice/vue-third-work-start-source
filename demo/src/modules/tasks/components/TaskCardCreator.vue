@@ -31,6 +31,9 @@
           </a>
         </div>
         <!--        Ошибка валидации поля ввода имени -->
+        <span v-if="validations.title.error" class="task-card__error-text">
+          {{ validations.title.error }}
+        </span>
       </div>
 
       <!--      Блок статуса задачи-->
@@ -122,6 +125,19 @@ const taskToWork = props.taskToEdit
 const task = ref(taskToWork);
 const router = useRouter();
 const dialog = ref(null);
+
+const setEmptyValidations = () => ({
+  title: {
+    error: "",
+    rules: ["required"],
+  },
+  url: {
+    error: "",
+    rules: ["url"],
+  },
+});
+
+const validations = ref(setEmptyValidations());
 
 onMounted(() => {
   // Фокусируем на диалоговом окне, чтобы сработала клавиша Esc без дополнительного клика на окне
