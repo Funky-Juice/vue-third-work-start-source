@@ -118,6 +118,12 @@
       <!--      Блок подзадач-->
       <div class="task-card__block">
         <!--        Список подзадач-->
+        <task-card-view-ticks-list
+          :ticks="task.ticks"
+          @createTick="createTick"
+          @updateTick="updateTick"
+          @removeTick="removeTick"
+        />
       </div>
 
       <!--      Блок тегов-->
@@ -140,11 +146,12 @@ import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { cloneDeep } from "lodash";
 
-import { createNewDate } from "@/common/helpers";
+import { createUUIDv4, createNewDate } from "@/common/helpers";
 import { STATUSES } from "@/common/constants";
 import { useTaskCardDate } from "@/common/composables";
 import taskStatuses from "@/common/enums/taskStatuses";
 
+import TaskCardViewTicksList from "./TaskCardViewTicksList.vue";
 import TasksCardCreatorUserSelector from "./TaskCardCreatorUserSelector.vue";
 import TasksCardCreatorDueDateSelector from "./TaskCardCreatorDueDateSelector.vue";
 
@@ -170,6 +177,14 @@ const createNewTask = () => ({
   urlDescription: "",
   ticks: [],
   tags: "",
+});
+
+const createNewTick = () => ({
+  // Добавляем временный идентификатор до момента отправки на сервер
+  uuid: createUUIDv4(),
+  taskId: null,
+  text: "",
+  done: false,
 });
 
 // Определяем, если мы работаем над редактированием задачи или создаём новую
@@ -210,6 +225,36 @@ function setStatus(status) {
     task.value.statusId = +key;
   } else {
     task.value.statusId = null;
+  }
+}
+
+function createTick() {
+  task.value.ticks.push(createNewTick());
+}
+
+// Используем uuid для новых подзадач, id для существующих
+function updateTick(tick) {
+  const index = task.value.ticks.findIndex(({ uuid, id }) => {
+    if (uuid) {
+      return tick.uuid === uuid;
+    }
+    if (id) {
+      return tick.id === id;
+    }
+    return false;
+  });
+  if (~index) {
+    // bitwise NOT (~) operator
+    task.value.ticks.splice(index, 1, tick);
+  }
+}
+
+function removeTick({ uuid, id }) {
+  if (uuid) {
+    task.value.ticks = task.value.ticks.filter((tick) => tick.uuid !== uuid);
+  }
+  if (id) {
+    task.value.ticks = task.value.ticks.filter((tick) => tick.id !== id);
   }
 }
 
