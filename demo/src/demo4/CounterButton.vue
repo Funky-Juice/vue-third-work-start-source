@@ -5,7 +5,7 @@
 </template>
 
 <script setup>
-defineEmits(['action']);
+defineEmits(["action"]);
 </script>
 
 <style lang="scss" scoped>
@@ -19,8 +19,14 @@ defineEmits(['action']);
   background: #dd0000;
   color: white;
   cursor: pointer;
+
   &:hover {
     background: #ff0000;
+  }
+
+  &[disabled] {
+    background: #999;
+    cursor: not-allowed;
   }
 }
 </style>

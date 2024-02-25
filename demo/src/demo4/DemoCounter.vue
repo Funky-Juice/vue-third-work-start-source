@@ -1,30 +1,27 @@
 <template>
+  <demo-container>
     <div class="counter">
-      <counter-button @action="decrement">-</counter-button>
+      <counter-button
+        :disabled="counterStore.isDecrementDisabled"
+        @action="counterStore.decrement"
+        >-</counter-button
+      >
 
-      <counter-value :value="count" />
+      <counter-value :value="counterStore.value" />
 
-      <counter-button @action="increment">+</counter-button>
+      <counter-button @action="counterStore.increment">+</counter-button>
     </div>
+  </demo-container>
 </template>
 
-
 <script setup>
-import { ref } from 'vue'
-import CounterButton from "demo/src/demo1/CounterButton.vue";
-import CounterValue from "demo/src/demo1/CounterValue.vue";
+import { ref } from "vue";
+import CounterButton from "./CounterButton.vue";
+import CounterValue from "./CounterValue.vue";
+import DemoContainer from "../components/DemoContainer.vue";
+import { useCounterStore } from "./store";
 
-const count = ref(0)
-
-/* Метод уменьшения значения */
-const decrement = () => {
-  count.value = count.value - 1
-}
-
-/* Метод увеличения значения */
-const increment = () => {
-  count.value = count.value + 1
-}
+const counterStore = useCounterStore();
 </script>
 
 <style lang="scss" scoped>
