@@ -109,6 +109,7 @@
 import { ref, onMounted, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { getReadableDate, getImage } from "../common/helpers";
+import { useTasksStore } from "@/stores/index.js";
 
 import { useTaskCardDate } from "../common/composables";
 
@@ -118,22 +119,15 @@ import TaskCardViewComments from "../modules/tasks/components/TaskCardViewCommen
 
 const router = useRouter();
 const route = useRoute();
+const tasksStore = useTasksStore();
 const dialog = ref(null);
-
-// Передадим все задачи в компонент
-const props = defineProps({
-  tasks: {
-    type: Array,
-    required: true,
-  },
-});
 
 const dueDate = computed(() => {
   return getReadableDate(task.value.dueDate || "");
 });
 
 const task = computed(() => {
-  return props.tasks.find((task) => task.id == route.params.id);
+  return tasksStore.tasks.find((task) => task.id == route.params.id);
 });
 
 onMounted(() => {
