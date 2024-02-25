@@ -156,6 +156,7 @@
 import { ref, onMounted, watch } from "vue";
 import { useRouter } from "vue-router";
 import { cloneDeep } from "lodash";
+import { useTasksStore } from "@/stores/tasks";
 
 import { createUUIDv4, createNewDate } from "@/common/helpers";
 import { STATUSES } from "@/common/constants";
@@ -176,7 +177,7 @@ const props = defineProps({
   },
 });
 
-const emits = defineEmits(["addTask", "editTask", "deleteTask"]);
+const tasksStore = useTasksStore();
 
 // Функция для создания новых задач
 const createNewTask = () => ({
@@ -292,10 +293,10 @@ function submit() {
   }
   if (props.taskToEdit) {
     // Редактируемая задача
-    emits("editTask", task.value);
+    tasksStore.editTask(task.value);
   } else {
     // Новая задача
-    emits("addTask", task.value);
+    tasksStore.addTask(task.value);
   }
   // Переход на главную страницу
   router.push("/");
@@ -311,7 +312,7 @@ function closeDialog() {
 }
 
 function deleteTask() {
-  emits("deleteTask", task.value.id);
+  tasksStore.deleteTask(task.value.id);
   router.push("/");
 }
 </script>
