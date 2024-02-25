@@ -48,6 +48,7 @@
 
 <script setup>
 import { reactive, computed, nextTick, ref } from "vue";
+import { useTasksStore } from "@/stores";
 import AppDrop from "@/common/components/AppDrop.vue";
 import AppIcon from "@/common/components/AppIcon.vue";
 import TaskCard from "@/modules/tasks/components/TaskCard.vue";
@@ -58,21 +59,22 @@ const props = defineProps({
     type: Object,
     required: true,
   },
-  tasks: {
-    type: Array,
-    required: true,
-  },
 });
+
 const columnTitle = ref(null);
+
+const tasksStore = useTasksStore();
+
 const state = reactive({
   isInputShowed: false,
   columnTitle: props.column.title,
 });
-const emits = defineEmits(["update", "delete", "updateTasks"]);
+
+const emits = defineEmits(["update", "delete"]);
 
 // Фильтруем задачи, которые относятся к конкретной колонке
 const columnTasks = computed(() => {
-  return props.tasks
+  return tasksStore.filteredTasks
     .filter((task) => task.columnId === props.column.id)
     .sort((a, b) => a.sortOrder - b.sortOrder);
 });
@@ -106,7 +108,7 @@ function moveTask(active, toTask) {
 
   const toColumnId = props.column ? props.column.id : null;
   // Получить задачи для текущей колонки
-  const targetColumnTasks = getTargetColumnTasks(toColumnId, props.tasks);
+  const targetColumnTasks = getTargetColumnTasks(toColumnId, tasksStore.tasks);
   const activeClone = { ...active, columnId: toColumnId };
   // Добавить активную задачу в колонку
   const resultTasks = addActive(activeClone, toTask, targetColumnTasks);
@@ -119,7 +121,7 @@ function moveTask(active, toTask) {
       tasksToUpdate.push(newTask);
     }
   });
-  emits("updateTasks", tasksToUpdate);
+  tasksStore.updateTasks(tasksToUpdate);
 }
 </script>
 
