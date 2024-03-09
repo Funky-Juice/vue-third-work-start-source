@@ -1,3 +1,5 @@
+import { isAdmin } from "@/middlewares";
+
 export default [
   {
     path: "/login",
@@ -24,12 +26,14 @@ export default [
         name: "TaskCreate",
         component: () => import("../views/TaskCreate.vue"),
         meta: { layout: "AppLayoutMain" },
+        middlewares: [isAdmin],
       },
       {
         path: "/tasks/edit/:id",
         name: "TaskEdit",
         component: () => import("../views/TaskEdit.vue"),
         meta: { layout: "AppLayoutMain" },
+        middlewares: [isAdmin],
       },
     ],
   },
